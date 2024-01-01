@@ -13,9 +13,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import ecommerce.pageobjects.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class EndToEndFlow {
+public class SubmitOrder {
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -23,10 +24,10 @@ public class EndToEndFlow {
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-		driver.get("https://rahulshettyacademy.com/client");
-		driver.findElement(By.id("userEmail")).sendKeys("shanidev@gmail.com");
-		driver.findElement(By.id("userPassword")).sendKeys("Shanidev123");
-		driver.findElement(By.id("login")).click();
+		
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.goTo();
+		loginPage.loginApplication("shanidev@gmail.com", "Shanidev123");
 
 		List<WebElement> products = new ArrayList<WebElement>();
 		WebElement product = null;
@@ -81,8 +82,9 @@ public class EndToEndFlow {
 		driver.findElement(By.xpath("//button[@type='button'][2]")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".btnn.action__submit")));
 		Thread.sleep(5000);
+		new Actions(driver).moveToElement(driver.findElement(By.cssSelector(".actions .action__submit"))).perform();
 		driver.findElement(By.cssSelector(".actions .action__submit")).click();
-
+		
 		String confirmMessage = driver.findElement(By.cssSelector(".hero-primary")).getText();
 		Assert.assertTrue(confirmMessage.equalsIgnoreCase("THANK YOU FOR THE ORDER."));
 		driver.close();
